@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Trivia</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB"
+        crossorigin="anonymous">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <!-- <link rel="stylesheet" type="text/css" media="screen" href="main.css" /> -->
+    <!-- <script src="main.js"></script> -->
+
+    <style>
+        body {
+            width: 400px;
+            margin: auto;
+            background-image: url("https://n1.sdlcdn.com/imgs/b/s/6/SDL410494284_2-e720c.jpg");
+        }
+
+        #bod {}
+    </style>
+</head>
+
+<body>
+
+
+    <div id="container bod">
+
+        <div id="row">
+            <div id="col">
+                <h1></h1>
+            </div>
+        </div>
+
+        <div id="row">
+            <div id="col">
+                <div id="btn"></div>
+                <div id="resetB"></div>
+            </div>
+        </div>
+
+        <div id="row">
+            <div id="col">
+                <div id="theQuestion"></div>
+                <div id="a1"></div>
+                <div id="a2"></div>
+                <div id="a3"></div>
+                <div id="a4"></div>
+            </div>
+        </div>
+
+        <div id="row">
+            <div id="col">
+                <div id="gameMessage"></div>
+            </div>
+        </div>
+
+        <div id="row">
+            <div id="col">
+                <div id="correct_ans_count"></div>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+
+        var qBucket = [
+            {
+                question: "Which of these Tupperware items was sold first?",
+                a: "Wonderlier storage bowls",
+                b: "Cake taker",
+                c: "Lettuce container",
+                d: "Salt and pepper shakers",
+                ca: "a"
+            },
+
+            {
+                question: "Which celebrity is a fan of Tupperware?",
+                a: "Queen Elizabeth II",
+                b: "Drew Barrymore",
+                c: "Patti LaBelle",
+                d: "All of them",
+                ca: "d"
+            },
+
+            {
+                question: "Which of these items did Tupperware not make?",
+                a: "Dog bowl",
+                b: "Pickle container",
+                c: "Travel desk",
+                d: "Vegetable chopper",
+                ca: "a"
+            },
+
+            {
+                question: "Which word describes want happens when you let a little bit of air out of your Tupperware so it seals properly?",
+                a: "Sigh",
+                b: "Burp",
+                c: "Hiccup",
+                d: "Pop",
+                ca: "b"
+            },
+
+            {
+                question: "What object inspired the seal on a Tupperware container?",
+                a: "Paint can",
+                b: "Canning jar",
+                c: "Bandage",
+                d: "Car door",
+                ca: "a"
+            }
+        ];
+        console.log(qBucket[0].question);
+        var test = qBucket[1].ca;
+        console.log(test);
+
+
+
+        var setGameStatus = true;
+        var theId;
+        var countdown = 11;
+        var correctAnswerA = false;
+        var correctAnswerB = false;
+        var correctAnswerC = false;
+        var correctAnswerD = false;
+        var question_number = 0;
+        var numCorrectans = 0;
+        var aSwitch = false;
+
+        $("#btn").html('<button type="button" class="btn btn-primary btn-lg">Start Trivia</button>');
+
+        function decrements() {
+
+            console.log("----start of decrements----");
+            console.log("setGameStatus " + setGameStatus);
+            console.log("aSwitch " + aSwitch);
+            console.log("question number " + question_number);
+            console.log("qBucket length " + qBucket.length);
+            console.log("countdown " + countdown);
+
+            countdown--;
+
+            if (setGameStatus) {
+                loadThequestion();
+            }
+
+            $("h1").html(countdown);
+            $("#gameMessage").empty();
+            $("#gameMessage").removeAttr("class");
+            $("#gameMessage").removeAttr("role");
+
+
+            if (countdown === 0 || aSwitch) {
+
+                console.log("----inside decrements in countdown === 0 and aSwitch----");
+                console.log("setGameStatus " + setGameStatus);
+                console.log("aSwitch " + aSwitch);
+                console.log("question number " + question_number);
+                console.log("qBucket length " + qBucket.length);
+                console.log("countdown " + countdown);
+
+                if (question_number === qBucket.length) {
+                    $("h1").html("Good Job, Game Over.");
+                    stopTimer();
+                    $("#resetB").html('<button type="button" class="btn btn-primary btn-lg">Play Again</button>');
+                    setGameStatus = true;
+                    question_number = 0;
+
+                    $("#theQuestion").empty();
+                    $("#a1").empty();
+                    $("#a2").empty();
+                    $("#a3").empty();
+                    $("#a4").empty();
+
+                    $("#theQuestion").removeAttr("class", "role");
+                    $("#a1").removeAttr("class", "role");
+                    $("#a2").removeAttr("class", "role");
+                    $("#a3").removeAttr("class", "role");
+                    $("#a4").removeAttr("class", "role");
+
+                } else {
+                    console.log("----inside decrements in countdown === 0 and aSwitch else----");
+                    console.log("setGameStatus " + setGameStatus);
+                    console.log("aSwitch " + aSwitch);
+                    console.log("question number " + question_number);
+                    console.log("qBucket length " + qBucket.length);
+                    console.log("countdown " + countdown);
+
+                    $("h1").html("next question.");
+                    console.log("right after clearinterval, countdown var is: " + countdown);
+                    console.log("theId: " + theId);
+
+
+                    // stopTimer();
+                    // nextQ();
+                    // aSwitch = true;
+                    // $("#resetB").html("<button>Click to Play Again</button>");
+                    setGameStatus = true;
+                    // question_number++;
+                    countdown = 11;
+                    // aSwitch = false;
+                }
+                if (!aSwitch) {
+                    nextQ();
+                }
+                aSwitch = false;
+            }
+
+            console.log("----end of decrements----");
+            console.log("setGameStatus " + setGameStatus);
+            console.log("aSwitch " + aSwitch);
+            console.log("question number " + question_number);
+            console.log("qBucket length " + qBucket.length);
+            console.log("countdown " + countdown);
+
+        }
+
+        function loadThequestion() {
+
+            if (question_number < qBucket.length) {
+                $("#theQuestion").attr({ class: "alert alert-secondary", role: "alert" }).text(qBucket[question_number].question);
+
+                $("#a1").attr({ class: "alert alert-primary", role: "alert" }).text(qBucket[question_number].a);
+                $("#a2").attr({ class: "alert alert-primary", role: "alert" }).text(qBucket[question_number].b);
+                $("#a3").attr({ class: "alert alert-primary", role: "alert" }).text(qBucket[question_number].c);
+                $("#a4").attr({ class: "alert alert-primary", role: "alert" }).text(qBucket[question_number].d);
+            }
+
+        }
+
+        function stopTimer() {
+            clearInterval(theId);
+            correctAnswerA = false;
+            correctAnswerB = false;
+            correctAnswerC = false;
+            correctAnswerD = false;
+            countdown = 11;
+
+        }
+
+        function nextQ() {
+            question_number++;
+
+        }
+
+        $("#btn").on("click", function () {               // CLICK ON START GAME
+            if (setGameStatus) {
+                if (question_number < qBucket.length) {
+                    $("#btn").empty();
+                    console.log("button works");
+                    setGameStatus = true;
+
+                    clearInterval(theId);
+                    theId = setInterval(decrements, 1000);
+                } else {
+                    question_number = 0;
+                }
+            } else {
+                $("#gameMessage").text("Restart the Game");
+            }
+        });
+
+        $("#resetB").on("click", function () {               // CLICK ON RESTART GAME
+            question_number = 0;
+            if (setGameStatus) {
+                $("#correct_ans_count").empty();
+                numCorrectans = 0;
+
+                if (question_number < qBucket.length) {
+                    $("#resetB").empty();
+                    console.log("button works");
+
+                    clearInterval(theId);
+                    theId = setInterval(decrements, 1000);
+                } else {
+                    numCorrectans = 0;
+                    question_number = 0;
+                }
+            } else {
+                $("#gameMessage").text("Restart the Game");
+            }
+        });
+
+        $("#a1").on("click", function () {                  // CLICK ON A
+
+            if (qBucket[question_number].ca === "a") {
+                numCorrectans++;
+                $("#gameMessage").attr({ class: "alert alert-success", role: "alert" }).text("You got the right answer!");
+                $("#correct_ans_count").attr("class", "badge badge-secondary").text("Correct answers: " + numCorrectans);
+                stopTimer();
+                nextQ();
+                aSwitch = true;
+
+                clearInterval(theId);
+                theId = setInterval(decrements, 1000);
+
+                // console.log();
+            } else {
+                $("#gameMessage").attr({ class: "alert alert-danger", role: "alert" }).text("Sorry, you picked the wrong answer!");
+                $("#correct_ans_count").attr("class", "badge badge-secondary").text("Correct answers: " + numCorrectans);
+                stopTimer();
+                nextQ();
+                aSwitch = true;
+
+                clearInterval(theId);
+                theId = setInterval(decrements, 1000);
+            }
+        });
+
+        $("#a2").on("click", function () {                  // CLICK ON B
+
+            if (qBucket[question_number].ca === "b") {
+                numCorrectans++;
+                $("#gameMessage").attr({ class: "alert alert-success", role: "alert" }).text("You got the right answer!");
+                $("#correct_ans_count").attr("class", "badge badge-secondary").text("Correct answers: " + numCorrectans);
+                stopTimer();
+                nextQ();
+                aSwitch = true;
+
+                clearInterval(theId);
+                theId = setInterval(decrements, 1000);
+
+                // console.log();
+            } else {
+                $("#gameMessage").attr({ class: "alert alert-danger", role: "alert" }).text("Sorry, you picked the wrong answer!");
+                $("#correct_ans_count").attr("class", "badge badge-secondary").text("Correct answers: " + numCorrectans);
+                stopTimer();
+                nextQ();
+                aSwitch = true;
+
+                clearInterval(theId);
+                theId = setInterval(decrements, 1000);
+            }
+        });
+
+        $("#a3").on("click", function () {                  // CLICK ON C
+
+            if (qBucket[question_number].ca === "c") {
+                numCorrectans++;
+                $("#gameMessage").attr({ class: "alert alert-success", role: "alert" }).text("You got the right answer!");
+                $("#correct_ans_count").attr("class", "badge badge-secondary").text("Correct answers: " + numCorrectans);
+                stopTimer();
+                nextQ();
+                aSwitch = true;
+
+                clearInterval(theId);
+                theId = setInterval(decrements, 1000);
+
+                // console.log();
+            } else {
+                $("#gameMessage").attr({ class: "alert alert-danger", role: "alert" }).text("Sorry, you picked the wrong answer!");
+                $("#correct_ans_count").attr("class", "badge badge-secondary").text("Correct answers: " + numCorrectans);
+                stopTimer();
+                nextQ();
+                aSwitch = true;
+
+                clearInterval(theId);
+                theId = setInterval(decrements, 1000);
+            }
+        });
+
+        $("#a4").on("click", function () {                  // CLICK ON D
+
+            if (qBucket[question_number].ca === "d") {
+                numCorrectans++;
+                $("#gameMessage").attr({ class: "alert alert-success", role: "alert" }).text("You got the right answer!");
+                $("#correct_ans_count").attr("class", "badge badge-secondary").text("Correct answers: " + numCorrectans);
+                stopTimer();
+                nextQ();
+                aSwitch = true;
+
+                clearInterval(theId);
+                theId = setInterval(decrements, 1000);
+
+                // console.log();
+            } else {
+                $("#gameMessage").attr({ class: "alert alert-danger", role: "alert" }).text("Sorry, you picked the wrong answer!");
+                $("#correct_ans_count").attr("class", "badge badge-secondary").text("Correct answers: " + numCorrectans);
+                stopTimer();
+                nextQ();
+                aSwitch = true;
+
+                clearInterval(theId);
+                theId = setInterval(decrements, 1000);
+            }
+        });
+
+    </script>
+
+</body>
+
+</html>
